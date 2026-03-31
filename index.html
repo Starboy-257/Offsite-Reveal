@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Offsite Reveal 👀</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470') no-repeat center center/cover;
+      overflow: hidden;
+    }
+
+    .content {
+      animation: fadeIn 1s ease;
+    }
+
+    .container {
+      position: relative;
+      height: 200px;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #yesBtn {
+      position: absolute;
+      background-color: white;
+      color: #333;
+      font-weight: bold;
+    }
+
+    #noBtn {
+      background-color: #ff4d4d;
+      color: white;
+      font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes zoomOut {
+      to { transform: scale(1.2); filter: blur(8px); opacity: 0; }
+    }
+
+    .zoom-out {
+      animation: zoomOut 1s forwards;
+    }
+
+    @keyframes glowBounce {
+      0% { transform: scale(0.5); opacity: 0; }
+      60% { transform: scale(1.1); }
+      100% { transform: scale(1); text-shadow: 0 0 30px #00ffcc; }
+    }
+
+    .final-text {
+      font-size: 40px;
+      animation: glowBounce 1.2s ease forwards;
+    }
+
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      top: 0;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- CINEMATIC AUDIO (replace if needed) -->
+<audio id="music" src="https://assets.mixkit.co/sfx/preview/mixkit-dramatic-impact-hit-2146.mp3"></audio>
+
+<div class="content" id="mainContent">
+  <h2>Are you sure you want to know the offsite location? 👀</h2>
+
+  <div class="container">
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn" onclick="startSequence()">No</button>
+  </div>
+</div>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+
+yesBtn.style.left = "40%";
+yesBtn.style.top = "50%";
+
+yesBtn.addEventListener("mouseover", () => {
+  const c = document.querySelector(".container");
+  yesBtn.style.left = Math.random() * (c.clientWidth - yesBtn.offsetWidth) + "px";
+  yesBtn.style.top = Math.random() * (c.clientHeight - yesBtn.offsetHeight) + "px";
+});
+
+function startSequence() {
+  const music = document.getElementById("music");
+  music.currentTime = 0;
+  music.play();
+
+  document.body.innerHTML = `
+    <div class="content" id="step1">
+      <h1>
+        Request denied. Proceeding with the reveal.<br>
+        Hope you're ready for this one 😏
+      </h1>
+    </div>
+  `;
+
+  // 🔥 KEY PART — SYNC TIMING
+  setTimeout(() => {
+    document.getElementById("step1").classList.add("zoom-out");
+  }, 4000); // build-up phase
+
+  setTimeout(() => {
+    stepTwo();
+    music.pause(); // stop exactly at reveal
+  }, 5000); // BEAT DROP MOMENT
+}
+
+function stepTwo() {
+  document.body.innerHTML = `
+    <div class="content">
+      <h1>🥁 And the destination is…</h1>
+      <h2 class="final-text">🌄 Della Adventure Resort, Lonavala! 🔥</h2>
+    </div>
+  `;
+
+  launchConfetti();
+}
+
+function launchConfetti() {
+  for (let i = 0; i < 100; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background = ["#ff0","#f00","#0ff","#0f0","#fff"][Math.floor(Math.random()*5)];
+    c.style.animationDuration = (Math.random()*2 + 2) + "s";
+    document.body.appendChild(c);
+  }
+}
+</script>
+
+</body>
+</html>
